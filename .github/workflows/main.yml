@@ -16,6 +16,7 @@ jobs:
           echo "::set-output name=issue_number::$issue_number"
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Find card ID associated with the issue
         id: get-card
@@ -25,6 +26,7 @@ jobs:
         env:
           COLUMN_ID: <source_column_id> # ID of the column where the card currently is
           ISSUE_NUMBER: ${{ steps.get-issue.outputs.issue_number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Move card to "Changes Requested" column
         run: |
@@ -32,3 +34,4 @@ jobs:
         env:
           CARD_ID: ${{ steps.get-card.outputs.card_id }}
           COLUMN_ID: <destination_column_id> # ID of your "Changes Requested" column
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
