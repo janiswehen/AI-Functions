@@ -1,36 +1,16 @@
-name: Move Card on Changes Requested
+name: Update Project Status to Backlog
 
 on:
-  pull_request_review:
-    types: [submitted]
+  project_card:
+    types:
+      - created
 
 jobs:
-  move-card:
-    if: github.event.review.state == 'changes_requested'
+  update-status:
     runs-on: ubuntu-latest
     steps:
-      - name: Parse issue number from PR description
-        id: get-issue
-        run: |
-          # Using a regex to extract issue number from the PR description.
-          # Assumes that the PR description contains "Fixes #issue_number"
-          issue_number=$(echo "${{ github.event.pull_request.body }}" | grep -oP 'Fixes #\K\d+')
-          echo "::set-output name=issue_number::$issue_number"
-          
-      - name: Find card ID associated with the issue
-        id: get-card
-        run: |
-          card_id=$(gh api projects/columns/cards -X GET -F column_id=${COLUMN_ID} --jq '.[] | select(.content_url | contains("issues/${ISSUE_NUMBER}")) | .id')
-          echo "::set-output name=card_id::$card_id"
-        env:
-          COLUMN_ID: <source_column_id> # ID of the column where the card currently is
-          ISSUE_NUMBER: ${{ steps.get-issue.outputs.issue_number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Move card to "Changes Requested" column
-        run: |
-          gh api projects/columns/cards/${CARD_ID}/moves -X POST -F position=bottom -F column_id=${COLUMN_ID}
-        env:
-          CARD_ID: ${{ steps.get-card.outputs.card_id }}
-          COLUMN_ID: <destination_column_id> # ID of your "Changes Requested" column
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check out repository
+        uses: actions/checkout@v2
+        
+      - name: Update Project Status to Backlog
+        run: echo 'test'
