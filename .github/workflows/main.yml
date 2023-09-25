@@ -9,14 +9,13 @@ jobs:
     if: github.event.review.state == 'changes_requested'
     runs-on: ubuntu-latest
     steps:
-      - name: Find issue number associated with PR
+      - name: Parse issue number from PR description
         id: get-issue
         run: |
-          issue_number=$(gh pr view ${PR_NUMBER} --json linkedIssues --jq '.linkedIssues[0].number')
+          # Using a regex to extract issue number from the PR description.
+          # Assumes that the PR description contains "Fixes #issue_number"
+          issue_number=$(echo "${{ github.event.pull_request.body }}" | grep -oP 'Fixes #\K\d+')
           echo "::set-output name=issue_number::$issue_number"
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Find card ID associated with the issue
         id: get-card
