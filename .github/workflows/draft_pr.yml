@@ -2,7 +2,7 @@ name: New Draft PR update project fields
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, reopened]
 
 jobs:
   project-draft-pr:
