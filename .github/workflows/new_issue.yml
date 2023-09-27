@@ -1,0 +1,25 @@
+name: Create and/or Update edited issues to my project
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  create-update-project:
+    name: Create/update project issue
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+#      - uses: actions/add-to-project@v0.3.0 # This adds the issue to the project
+#        with:
+#          project-url: https://github.com/users/janiswehen/projects/1
+#          github-token: ${{ secrets.GHPROJECT_SECRET }}
+#        id: add-project
+      - uses: EndBug/project-fields@v1 # Changes the project field
+        with:
+          fields: Status
+          github_token: ${{ secrets.GHPROJECT_SECRET }}
+          project_url: https://github.com/users/janiswehen/projects/1
+          resource_url: https://github.com/janiswehen/AI-Functions/issues/${{ github.event.issue.number }}
+          values: Review Requested
