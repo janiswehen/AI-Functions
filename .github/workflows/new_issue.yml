@@ -22,4 +22,4 @@ jobs:
           github_token: ${{ secrets.GHPROJECT_SECRET }}
           project_url: https://github.com/users/janiswehen/projects/1
           resource_url: https://github.com/janiswehen/AI-Functions/issues/${{ github.event.issue.number }}
-          values: Review Requested
+          values: Project Backlog ✏️
