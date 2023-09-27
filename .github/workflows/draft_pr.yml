@@ -1,0 +1,24 @@
+name: New Draft PR update project fields
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  project-draft-pr:
+    name: Update Project Item Draft PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+#      - uses: actions/add-to-project@v0.3.0 # This adds the issue to the project
+#        with:
+#          project-url: https://github.com/users/janiswehen/projects/1
+#          github-token: ${{ secrets.GHPROJECT_SECRET }}
+#        id: add-project
+      - uses: EndBug/project-fields@v1 # Changes the project field
+        with:
+          fields: Review Status
+          github_token: ${{ secrets.GHPROJECT_SECRET }}
+          project_url: https://github.com/users/janiswehen/projects/1
+          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
+          values: Develop
