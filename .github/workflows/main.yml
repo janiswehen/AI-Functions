@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-#      - uses: actions/add-to-project@v0.3.0 # This adds the issue to the project
-#        with:
-#          project-url: https://github.com/users/janiswehen/projects/1
-#          github-token: ${{ secrets.GHPROJECT_SECRET }}
-#        id: add-project
+      - uses: actions/add-to-project@v0.3.0 # This adds the issue to the project
+        with:
+          project-url: https://github.com/users/janiswehen/projects/1
+          github-token: ${{ secrets.GHPROJECT_SECRET }}
+        id: add-project
       - uses: EndBug/project-fields@v1
         with:
           fields: Review Status
