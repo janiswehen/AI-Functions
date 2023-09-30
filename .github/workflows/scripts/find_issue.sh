@@ -37,12 +37,12 @@ response=$(curl -s -X PUT \
                -H "Authorization: token ${GITHUB_TOKEN}" \
                -H "Accept: application/vnd.github.v3+json" \
                -d "{\"labels\": $labels_json}" \
-               "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${pr_number}")
+               "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}")
 
 # Check if labels were applied successfully using jq
 if [[ $(echo "$response" | jq '.labels') ]]; then
     echo "Labels applied to PR successfully."
 else
     echo "Failed to apply labels to PR."
-    exit 1
+    exit 0
 fi
