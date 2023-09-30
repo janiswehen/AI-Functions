@@ -31,8 +31,6 @@ fi
 labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
 echo "Extracted labels: $labels_json"
 
-echo $GITHUB_REPOSITORY
-
 # Apply the labels to the pull request
 response=$(curl -L \
     -X PUT \
@@ -40,11 +38,7 @@ response=$(curl -L \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/labels \
-    -d '{"labels":["bug","invalid"]}' \
-    -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
-
-echo "Response from GitHub API:"
-echo "$response"
+    -d '{"labels":["bug","invalid"]}')
 
 http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
 if [[ "$http_status" -ge 200 && "$http_status" -lt 300 ]]; then
