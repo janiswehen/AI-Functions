@@ -40,7 +40,7 @@ response=$(curl -L \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     https://api.github.com/repos/OWNER/REPO/issues/${PR_NUMBER}/labels \
-    -d '{"labels":["bug","enhancement"]}' \
+    -d '{"labels":["bug","invalid"]}' \
     -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
 
 echo "Response from GitHub API:"
