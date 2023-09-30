@@ -1,9 +1,7 @@
 #!/bin/bash
 
-branch_name="$1" # The first argument is the branch name
-
-# Extract the longest digit prefix of branch_name
-digit_prefix=$(echo "$branch_name" | grep -o '^[0-9]*')
+# Extract the longest digit prefix of BRANCH_NAME
+digit_prefix=$(echo "$BRANCH_NAME" | grep -o '^[0-9]*')
 
 # Check the length of the digit prefix
 length=${#digit_prefix}
@@ -34,13 +32,12 @@ labels_json=$(echo "$issue_data" | jq '.labels[] .name')
 echo $labels_json
 
 # Apply the labels to the pull request
-pr_number=$(echo "${GITHUB_REF##*/}" | grep -oE '[0-9]+')
-echo $pr_number
+echo $PR_NUMBER
 response=$(curl -s -X PUT \
                -H "Authorization: token ${GITHUB_TOKEN}" \
                -H "Accept: application/vnd.github.v3+json" \
                -d "{\"labels\": $labels_json}" \
-               "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${pr_number}")
+               "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${pr_number}")
 
 # Check if labels were applied successfully using jq
 if [[ $(echo "$response" | jq '.labels') ]]; then

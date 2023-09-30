@@ -23,3 +23,5 @@ jobs:
       run: ./.github/workflows/scripts/find_issue.sh "${{ github.head_ref }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
+        BRANCH_NAME: ${{ github.head_ref }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
