@@ -7,8 +7,8 @@ digit_prefix=$(echo "$BRANCH_NAME" | grep -o '^[0-9]*')
 length=${#digit_prefix}
 
 # Exit if number is of length 0 or 1
-if [[ $length -eq 0 ]] && [[ $length -eq 1 ]]; then
-    echo "The digit prefix length is 0 nor 1. Exiting."
+if [[ $length -eq 0 ]] || [[ $length -eq 1 ]]; then
+    echo "The digit prefix length is 0 or 1. Exiting."
     exit 0
 fi
 
@@ -27,22 +27,26 @@ else
     echo "Issue found with title: $issue_title"
 fi
 
-# Extract issue labels with jq
-labels_json=$(echo "$issue_data" | jq '.labels[].name')
-echo $labels_json
+# Extract issue labels with jq and transform them into a JSON array format
+labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
+echo "Extracted labels: $labels_json"
 
 # Apply the labels to the pull request
-echo $PR_NUMBER
-response=$(curl -v -s -X PUT \
-               -H "Authorization: token ${GITHUB_TOKEN}" \
+response=$(curl -s -X POST \
                -H "Accept: application/vnd.github.v3+json" \
-               -d "{\"labels\": $labels_json}" \
-               "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}")
+               -H "Authorization: token ${GITHUB_TOKEN}" \
+               -H "X-GitHub-Api-Version: 2022-11-28" \
+               "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/labels" \
+               -d "{\"labels\":${labels_json}}" \
+               -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
 
-# Check if labels were applied successfully using jq
-if [[ $(echo "$response" | jq '.labels') ]]; then
+echo "Response from GitHub API:"
+echo "$response"
+
+http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+if [[ "$http_status" -ge 200 && "$http_status" -lt 300 ]]; then
     echo "Labels applied to PR successfully."
 else
     echo "Failed to apply labels to PR."
-    exit 0
+    exit 1
 fi
