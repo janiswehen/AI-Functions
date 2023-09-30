@@ -8,10 +8,10 @@ digit_prefix=$(echo "$branch_name" | grep -o '^[0-9]*')
 # Check the length of the digit prefix
 length=${#digit_prefix}
 
-# Exit if number is not of length 4 or 5
-if [[ $length -ne 4 ]] && [[ $length -ne 5 ]]; then
-    echo "The digit prefix length is neither 4 nor 5. Exiting."
-    exit 1
+# Exit if number is of length 0 or 1
+if [[ $length -eq 0 ]] && [[ $length -eq 1 ]]; then
+    echo "The digit prefix length is 0 nor 1. Exiting."
+    exit 0
 fi
 
 # Fetch the issue details using GitHub API
