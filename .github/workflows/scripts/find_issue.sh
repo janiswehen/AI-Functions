@@ -28,7 +28,7 @@ else
 fi
 
 # Extract issue labels with jq
-labels_json=$(echo "$issue_data" | jq '.labels[] .name')
+labels_json=$(echo "$issue_data" | jq '.labels[].name')
 echo $labels_json
 
 # Apply the labels to the pull request
