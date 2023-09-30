@@ -1,4 +1,4 @@
-name: Update Project Fields for PR
+name: Update Project Status for PR
 
 on:
   pull_request:
@@ -15,11 +15,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: EndBug/project-fields@v1 # Changes the project field
         with:
-          fields: Review Status
+          fields: PR Status
           github_token: ${{ secrets.GHPROJECT_SECRET }}
-          project_url: https://github.com/users/janiswehen/projects/1
-          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
-          values: Develop
+          project_url: https://github.com/orgs/univelop/projects/1
+          resource_url: https://github.com/univelop/univelop/pull/${{ github.event.pull_request.number }}
+          values: 🏗️ Development
   project-pr-ready:
     if: ${{ github.event.pull_request.draft == false && github.event.pull_request.merged == false }}
     name: Update Project Item for PR ready for review
@@ -28,11 +28,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: EndBug/project-fields@v1 # Changes the project field
         with:
-          fields: Review Status
+          fields: PR Status
           github_token: ${{ secrets.GHPROJECT_SECRET }}
-          project_url: https://github.com/users/janiswehen/projects/1
-          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
-          values: Ready to Review
+          project_url: https://github.com/orgs/univelop/projects/1
+          resource_url: https://github.com/univelop/univelop/pull/${{ github.event.pull_request.number }}
+          values: 🕵️ Ready for Test Review
   project-pr-merged:
     if: ${{ github.event.pull_request.merged == true }}
     name: Update Project Item for PR merged
@@ -41,8 +41,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: EndBug/project-fields@v1 # Changes the project field
         with:
-          fields: Review Status
+          fields: PR Status
           github_token: ${{ secrets.GHPROJECT_SECRET }}
-          project_url: https://github.com/users/janiswehen/projects/1
-          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
+          project_url: https://github.com/orgs/univelop/projects/1
+          resource_url: https://github.com/univelop/univelop/pull/${{ github.event.pull_request.number }}
           values: ✨ Merged
