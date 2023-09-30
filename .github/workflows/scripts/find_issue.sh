@@ -31,9 +31,11 @@ fi
 
 # Extract issue labels with jq
 labels_json=$(echo "$issue_data" | jq '.labels[] .name')
+echo labels_json
 
 # Apply the labels to the pull request
 pr_number=$(echo "${GITHUB_REF##*/}" | grep -oE '[0-9]+')
+echo pr_number
 response=$(curl -s -X PUT \
                -H "Authorization: token ${GITHUB_TOKEN}" \
                -H "Accept: application/vnd.github.v3+json" \
