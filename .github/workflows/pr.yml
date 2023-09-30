@@ -17,8 +17,8 @@ jobs:
         with:
           fields: PR Status
           github_token: ${{ secrets.GHPROJECT_SECRET }}
-          project_url: https://github.com/orgs/univelop/projects/1
-          resource_url: https://github.com/univelop/univelop/pull/${{ github.event.pull_request.number }}
+          project_url: https://github.com/users/janiswehen/projects/1
+          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
           values: 🏗️ Development
   project-pr-ready:
     if: ${{ github.event.pull_request.draft == false && github.event.pull_request.merged == false }}
@@ -30,8 +30,8 @@ jobs:
         with:
           fields: PR Status
           github_token: ${{ secrets.GHPROJECT_SECRET }}
-          project_url: https://github.com/orgs/univelop/projects/1
-          resource_url: https://github.com/univelop/univelop/pull/${{ github.event.pull_request.number }}
+          project_url: https://github.com/users/janiswehen/projects/1
+          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
           values: 🕵️ Ready for Test Review
   project-pr-merged:
     if: ${{ github.event.pull_request.merged == true }}
@@ -43,6 +43,6 @@ jobs:
         with:
           fields: PR Status
           github_token: ${{ secrets.GHPROJECT_SECRET }}
-          project_url: https://github.com/orgs/univelop/projects/1
-          resource_url: https://github.com/univelop/univelop/pull/${{ github.event.pull_request.number }}
+          project_url: https://github.com/users/janiswehen/projects/1
+          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
           values: ✨ Merged
