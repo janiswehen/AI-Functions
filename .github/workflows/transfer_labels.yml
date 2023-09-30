@@ -1,23 +1,25 @@
-name: Add in progress label to issue
+name: Find Issue
 
 on:
   pull_request:
-    types: [opened]
+    types:
+      - opened
 
 jobs:
-  add_in_progress:
-    if: ${{ github.head_ref =~ ^\d{4,5} }}
-    name: Update Project Item Draft PR
+  find-issue:
     runs-on: ubuntu-latest
-    steps:
-      - name: Extract issue number from branch name
-        run: echo "ISSUE_NUMBER=$(echo ${{ github.head_ref }} | grep -oP '^\d{4,5}')" >> $GITHUB_ENV
 
-      - name: Add 'in_Progress' label to the issue
-        run: |
-          curl -s \
-               -X POST \
-               -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               -H "Accept: application/vnd.github.v3+json" \
-               https://api.github.com/repos/${{ github.repository }}/issues/${{ env.ISSUE_NUMBER }}/labels \
-               -d '{"labels": ["in_Progress"]}'
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+      
+    - name: Install jq
+      run: sudo apt-get install jq
+
+    - name: Give execution permission to script
+      run: chmod +x .github/workflows/scripts/find_issue.sh
+
+    - name: Run script to find issue
+      run: ./.github/workflows/scripts/find_issue.sh "${{ github.head_ref }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
