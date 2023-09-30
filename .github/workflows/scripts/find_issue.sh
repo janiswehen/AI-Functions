@@ -33,7 +33,7 @@ echo $labels_json
 
 # Apply the labels to the pull request
 echo $PR_NUMBER
-response=$(curl -s -X PUT \
+response=$(curl -v -s -X PUT \
                -H "Authorization: token ${GITHUB_TOKEN}" \
                -H "Accept: application/vnd.github.v3+json" \
                -d "{\"labels\": $labels_json}" \
