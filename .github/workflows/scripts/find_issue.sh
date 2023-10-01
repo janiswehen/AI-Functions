@@ -31,8 +31,6 @@ fi
 labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
 echo "Extracted labels: $labels_json"
 
-echo $GITHUB_REPOSITORY
-
 # Apply the labels to the pull request
 response=$(curl -L \
     -X PUT \
