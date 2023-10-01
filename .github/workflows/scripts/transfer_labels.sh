@@ -74,9 +74,6 @@ apply_labels_to_issue() {
                     -d "{\"labels\":${labels_json}}" \
                     -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
 
-    echo "Response from GitHub API:" >&2
-    echo "$response" >&2
-
     http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
 
     # Check the API response status
