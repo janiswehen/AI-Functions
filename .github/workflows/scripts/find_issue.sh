@@ -38,7 +38,7 @@ response=$(curl -L \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/labels \
-    -d '{"labels":["bug","invalid"]}' \
+    -d '{"labels":[${labels_json}]}' \
     -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
 
 echo "Response from GitHub API:"
@@ -49,5 +49,5 @@ if [[ "$http_status" -ge 200 && "$http_status" -lt 300 ]]; then
     echo "Labels applied to PR successfully."
 else
     echo "Failed to apply labels to PR."
-    exit 1
+    exit 0
 fi
