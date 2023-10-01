@@ -30,7 +30,6 @@ fi
 # Extract issue labels with jq and transform them into a JSON array format
 labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
 echo "Extracted labels: $labels_json"
-echo "{\"labels\":[$labels_json]}"
 
 # Apply the labels to the pull request
 response=$(curl -L \
@@ -39,7 +38,7 @@ response=$(curl -L \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
     https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/labels \
-    -d '{"labels":[${labels_json}]}' \
+    -d "{\"labels\":$labels_json}" \
     -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
 
 echo "Response from GitHub API:"
