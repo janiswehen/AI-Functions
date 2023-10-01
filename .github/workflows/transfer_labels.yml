@@ -1,0 +1,27 @@
+name: Transfer Labels from Issue to PR
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  transfer-labels:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+      
+    - name: Install jq
+      run: sudo apt-get install jq
+
+    - name: Give execution permission to script
+      run: chmod +x .github/workflows/scripts/transfer_labels.sh
+
+    - name: Run script to transfer labels
+      run: ./.github/workflows/scripts/transfer_labels.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
+        BRANCH_NAME: ${{ github.head_ref }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
