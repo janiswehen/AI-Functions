@@ -28,7 +28,7 @@ jobs:
         PR_NUMBER: ${{ github.event.pull_request.number }}
   release-label:
     name: Add Release Label
-    if: ${{ github.event.pull_request.base.label == 'release' }}
+    if: ${{ github.event.pull_request.base.ref == 'release' }}
     runs-on: ubuntu-latest
 
     steps:
