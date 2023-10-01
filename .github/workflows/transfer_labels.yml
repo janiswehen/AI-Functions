@@ -16,27 +16,27 @@ jobs:
         run: sudo apt-get install jq
       - name: chmod +x .github/workflows/scripts/*.sh
 
-  transfer-labels:
-    name: Transfer labels from Issue to PR
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-    - name: Run script to transfer labels
-      run: ./.github/workflows/scripts/transfer_labels.sh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
-        BRANCH_NAME: ${{ github.head_ref }}
-        PR_NUMBER: ${{ github.event.pull_request.number }}
+  # transfer-labels:
+  #   name: Transfer labels from Issue to PR
+  #   needs: setup
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Run script to transfer labels
+  #     run: ./.github/workflows/scripts/transfer_labels.sh
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
+  #       BRANCH_NAME: ${{ github.head_ref }}
+  #       PR_NUMBER: ${{ github.event.pull_request.number }}
 
-  release-label:
-    name: Add Release Label
-    if: ${{ github.event.pull_request.base.ref == 'release' }}
-    needs: setup
-    runs_on: ubuntu-latest
-    steps:
-    - name: Run script to transfer labels
-      run: ./.github/workflows/scripts/release_label.sh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
-        BRANCH_NAME: ${{ github.head_ref }}
-        PR_NUMBER: ${{ github.event.pull_request.number }}
+  # release-label:
+  #   name: Add Release Label
+  #   if: ${{ github.event.pull_request.base.ref == 'release' }}
+  #   needs: setup
+  #   runs_on: ubuntu-latest
+  #   steps:
+  #   - name: Run script to transfer labels
+  #     run: ./.github/workflows/scripts/release_label.sh
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
+  #       BRANCH_NAME: ${{ github.head_ref }}
+  #       PR_NUMBER: ${{ github.event.pull_request.number }}
