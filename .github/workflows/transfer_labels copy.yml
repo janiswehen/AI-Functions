@@ -1,4 +1,4 @@
-name: Add Labels
+name: Transfer Labels
 
 on:
   pull_request:
