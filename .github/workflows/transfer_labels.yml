@@ -47,5 +47,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
         BRANCH_NAME: ${{ github.head_ref }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
-        BASE_REF: ${{ github.event.pull_request.base.ref }}
-        BASE_LABEL: ${{ github.event.pull_request.base.label }}

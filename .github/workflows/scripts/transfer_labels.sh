@@ -1,58 +1,91 @@
 #!/bin/bash
 
 # Extract the longest issue number of BRANCH_NAME
-issue_number=$(echo "$BRANCH_NAME" | grep -o '^[0-9]*')
+get_issue_number() {
+    local issue_number
+    issue_number=$(echo "$BRANCH_NAME" | grep -o '^[0-9]*')
+    local length=${#issue_number}
 
-# Check the length of the digit prefix
-length=${#issue_number}
+    # Exit if the issue number length is 0 or 1
+    if [[ $length -le 1 ]]; then
+        echo "The digit prefix length is 0 or 1. Exiting."
+        exit 0
+    fi
 
-# Exit if number is of length 0 or 1
-if [[ $length -eq 0 ]] || [[ $length -eq 1 ]]; then
-    echo "The digit prefix length is 0 or 1. Exiting."
-    exit 0
-fi
+    echo "$issue_number"
+}
 
-# Fetch the issue details using GitHub API
-issue_data=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
-                  -H "Accept: application/vnd.github.v3+json" \
-                  "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${issue_number}")
+# Fetch issue data using the GitHub API
+fetch_issue_data() {
+    local issue_number="$1"
 
-# Check if issue exists
-issue_title=$(echo "$issue_data" | jq -r '.title')
+    curl -s \
+         -H "Authorization: token ${GITHUB_TOKEN}" \
+         -H "Accept: application/vnd.github.v3+json" \
+         "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${issue_number}"
+}
 
-if [ "$issue_title" == "null" ]; then
-    echo "No issue found with number: $issue_number"
-    exit 0
-else
+# Apply labels to a pull request using the GitHub API
+apply_labels_to_issue() {
+    local issue_number="$1"
+    local labels_json="$2"
+    
+    local response
+    local http_status
+
+    response=$(curl -L \
+                     -X POST \
+                     -H "Accept: application/vnd.github+json" \
+                     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+                     https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${issue_number}/labels \
+                     -d "{\"labels\":${labels_json}}" \
+                     -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
+
+    echo "Response from GitHub API:"
+    echo "$response"
+
+    http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+
+    # Check the API response status
+    if [[ "$http_status" -ge 200 && "$http_status" -lt 300 ]]; then
+        echo "Labels applied to PR successfully."
+    else
+        echo "Failed to apply labels to PR."
+        exit 0
+    fi
+}
+
+get_labels_from_issue() {
+    local issue_number="$1"
+    local issue_data
+    local issue_title
+    local labels_json
+
+    issue_data=$(fetch_issue_data "$issue_number")
+    issue_title=$(echo "$issue_data" | jq -r '.title')
+
+    # Check if the issue exists
+    if [ "$issue_title" == "null" ]; then
+        echo "No issue found with number: $issue_number"
+        exit 0
+    fi
+
     echo "Issue found with title: $issue_title"
-fi
 
-# Extract issue labels with jq and transform them into a JSON array format
-labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
-if [ "$labels_json" == "" ]; then
-    echo "No labels found."
-    exit 0
-else
+    # Extract issue labels and format them into a JSON array
+    labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
+
+    if [ "$labels_json" == "[]" ]; then
+        echo "No labels found."
+        exit 0
+    fi
+
     echo "Extracted labels: $labels_json"
-fi
 
-# Apply the labels to the pull request
-response=$(curl -L \
-    -X POST \
-    -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/labels \
-    -d "{\"labels\":$labels_json}" \
-    -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
+    # Return the extracted labels in JSON format
+    echo "$labels_json"
+}
 
-echo "Response from GitHub API:"
-echo "$response"
-
-http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
-if [[ "$http_status" -ge 200 && "$http_status" -lt 300 ]]; then
-    echo "Labels applied to PR successfully."
-else
-    echo "Failed to apply labels to PR."
-    exit 0
-fi
+issue_number=$(get_issue_number)
+labels_json=$(get_labels_from_issue "$issue_number")
+apply_labels_to_issue "$PR_NUMBER" "$labels_json"
