@@ -38,7 +38,7 @@ fi
 
 # Apply the labels to the pull request
 response=$(curl -L \
-    -X PUT \
+    -X POST \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
