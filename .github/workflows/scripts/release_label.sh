@@ -2,6 +2,8 @@
 
 source .github/workflows/scripts/github_utils.sh
 
+echo "testtestets"
+
 # Define the release label
 release_label="Release"
 release_label_json="[\"$release_label\"]"
