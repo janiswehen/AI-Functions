@@ -30,7 +30,7 @@ fi
 # Extract issue labels with jq and transform them into a JSON array format
 labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
 echo "Extracted labels: $labels_json"
-echo '{"labels":[${labels_json}]}'
+echo "{\"labels\":[$labels_json]}"
 
 # Apply the labels to the pull request
 response=$(curl -L \
