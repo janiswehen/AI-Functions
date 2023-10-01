@@ -8,10 +8,10 @@ get_issue_number() {
 
     # Exit if the issue number length is 0 or 1
     if [[ $length -le 1 ]]; then
-        echo "The digit prefix length is 0 or 1. Exiting."
+        echo "The digit prefix length is 0 or 1. Exiting." >&2
         exit 0
     else
-        echo "Issue number: $issue_number"
+        echo "Issue number: $issue_number" >&2
     fi
 
     echo "$issue_number"
