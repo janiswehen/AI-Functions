@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Extract the longest issue number from BRANCH_NAME
 get_issue_number() {
     local branch_name="$1"
@@ -76,7 +78,7 @@ get_labels_to_issue_or_pr() {
     labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
 
     # Exit if no labels are found
-    if [ "$labels_json" == "[]" ]; then
+    if [ "$labels_json" == "" ]; then
         echo "Error: No labels found." >&2
         exit 1
     fi
