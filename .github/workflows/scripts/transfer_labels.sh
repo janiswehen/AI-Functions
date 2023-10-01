@@ -88,6 +88,8 @@ apply_labels_to_issue() {
     fi
 }
 
+echo "enter get_issue_number"
 issue_number=$(get_issue_number)
+echo "exit get_issue_number ${issue_number}"
 labels_json=$(get_labels_from_issue "$issue_number")
 apply_labels_to_issue "$PR_NUMBER" "$labels_json"
