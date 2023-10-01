@@ -2,8 +2,10 @@
 
 # Extract the longest issue number from BRANCH_NAME
 get_issue_number() {
+    local branch_name="$1"
+    
     local issue_number
-    issue_number=$(echo "$BRANCH_NAME" | grep -o '^[0-9]*')
+    issue_number=$(echo "$branch_name" | grep -o '^[0-9]*')
     local length=${#issue_number}
 
     # If the issue number length is 0 or 1, return empty string
@@ -19,8 +21,10 @@ get_issue_number() {
 
 # Add labels to an issue or PR using the GitHub API
 apply_labels_to_issue_or_pr() {
-    local issue_number="$1"
-    local labels_json="$2"
+    local github_token="$1"
+    local repo_name="$2"
+    local issue_number="$3"
+    local labels_json="$4"
     
     local response
     local http_status
@@ -28,8 +32,8 @@ apply_labels_to_issue_or_pr() {
     response=$(curl -L \
                     -X POST \
                     -H "Accept: application/vnd.github+json" \
-                    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-                    https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${issue_number}/labels \
+                    -H "Authorization: Bearer ${github_token}" \
+                    https://api.github.com/repos/${repo_name}/issues/${issue_number}/labels \
                     -d "{\"labels\":${labels_json}}" \
                     -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
 
@@ -46,15 +50,18 @@ apply_labels_to_issue_or_pr() {
 
 # Gets labels to an issue or PR using the GitHub API
 get_labels_to_issue_or_pr() {
-    local issue_number="$1"
+    local github_token="$1"
+    local repo_name="$2"
+    local issue_number="$3"
+    
     local issue_data
     local issue_title
     local labels_json
 
     issue_data=$(curl -s \
-                    -H "Authorization: token ${GITHUB_TOKEN}" \
+                    -H "Authorization: token ${github_token}" \
                     -H "Accept: application/vnd.github.v3+json" \
-                    "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${issue_number}")
+                    "https://api.github.com/repos/${repo_name}/issues/${issue_number}")
 
     issue_title=$(echo "$issue_data" | jq -r '.title')
     # Check if the issue exists

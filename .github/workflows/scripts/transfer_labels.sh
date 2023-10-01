@@ -2,7 +2,7 @@
 
 source .github/workflows/scripts/github_utils.sh
 
-issue_number=$(get_issue_number)
+issue_number=$(get_issue_number "$BRANCH_NAME")
 
 # Exit if no valid issue number found
 if [[ -z "$issue_number" ]]; then
@@ -10,7 +10,7 @@ if [[ -z "$issue_number" ]]; then
     exit 0
 fi
 
-labels_json=$(get_labels_to_issue_or_pr "$issue_number")
+labels_json=$(get_labels_to_issue_or_pr "$GITHUB_TOKEN" "$GITHUB_REPOSITORY" "$issue_number")
 
 # Check if labels_json is empty (No labels found scenario)
 if [[ -z "$labels_json" || "$labels_json" == "[]" ]]; then
@@ -18,4 +18,4 @@ if [[ -z "$labels_json" || "$labels_json" == "[]" ]]; then
     exit 0
 fi
 
-apply_labels_to_issue_or_pr "$PR_NUMBER" "$labels_json"
+apply_labels_to_issue_or_pr "$GITHUB_TOKEN" "$GITHUB_REPOSITORY" "$PR_NUMBER" "$labels_json"
