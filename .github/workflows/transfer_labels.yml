@@ -28,7 +28,7 @@ jobs:
         PR_NUMBER: ${{ github.event.pull_request.number }}
   release-label:
     name: Add Release Label
-    if: ${{ github.event.pull_request.base_ref == 'release' }}
+    if: ${{ github.event.pull_request.base.label == 'release' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -47,3 +47,5 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
         BRANCH_NAME: ${{ github.head_ref }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
+        BASE_REF: ${{ github.event.pull_request.base.ref }}
+        BASE_LABEL: ${{ github.event.pull_request.base.label }}

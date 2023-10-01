@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "test"
+echo "$BASE_REF $BASE_LABEL"
 exit 0
 
 # Extract the longest digit prefix of BRANCH_NAME
