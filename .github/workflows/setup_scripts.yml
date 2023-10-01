@@ -1,0 +1,9 @@
+name: 'Setup Scripts'
+description: 'Install jq and set permissions for scripts'
+runs:
+  using: "composite"
+  steps:
+    - run: sudo apt-get install jq
+      shell: bash
+    - run: chmod +x .github/workflows/scripts/*.sh
+      shell: bash

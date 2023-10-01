@@ -6,10 +6,10 @@ get_issue_number() {
     issue_number=$(echo "$BRANCH_NAME" | grep -o '^[0-9]*')
     local length=${#issue_number}
 
-    # Exit if the issue number length is 0 or 1
+    # If the issue number length is 0 or 1, return empty string
     if [[ $length -le 1 ]]; then
-        echo "The digit prefix length is 0 or 1. Not an issue branch. Exiting." >&2
-        exit 0
+        echo ""
+        return
     else
         echo "Issue number: $issue_number" >&2
     fi
