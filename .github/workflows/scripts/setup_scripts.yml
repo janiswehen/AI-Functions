@@ -1,3 +1,6 @@
+on:
+  workflow_call:
+
 name: 'Setup Scripts'
 description: 'Install jq and set permissions for scripts'
 runs:
