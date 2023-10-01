@@ -88,4 +88,5 @@ get_labels_from_issue() {
 
 issue_number=$(get_issue_number)
 labels_json=$(get_labels_from_issue "$issue_number")
+echo "got labels: ${labels_json} $labels_json"
 apply_labels_to_issue "$PR_NUMBER" "$labels_json"
