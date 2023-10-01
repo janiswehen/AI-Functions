@@ -38,11 +38,11 @@ get_labels_from_issue() {
 
     # Check if the issue exists
     if [ "$issue_title" == "null" ]; then
-        echo "No issue found with number: $issue_number"
+        echo "No issue found with number: $issue_number" >&2
         exit 0
     fi
 
-    echo "Issue found with title: $issue_title"
+    echo "Issue found with title: $issue_title" >&2
 
     # Extract issue labels and format them into a JSON array
     labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
@@ -52,7 +52,7 @@ get_labels_from_issue() {
         exit 0
     fi
 
-    echo "Extracted labels: $labels_json"
+    echo "Extracted labels: $labels_json" >&2
 
     # Return the extracted labels in JSON format
     echo "$labels_json"
@@ -74,22 +74,20 @@ apply_labels_to_issue() {
                     -d "{\"labels\":${labels_json}}" \
                     -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
 
-    echo "Response from GitHub API:"
-    echo "$response"
+    echo "Response from GitHub API:" >&2
+    echo "$response" >&2
 
     http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
 
     # Check the API response status
     if [[ "$http_status" -ge 200 && "$http_status" -lt 300 ]]; then
-        echo "Labels applied to PR successfully."
+        echo "Labels applied to PR successfully." >&2
     else
-        echo "Failed to apply labels to PR."
+        echo "Failed to apply labels to PR." >&2
         exit 0
     fi
 }
 
-echo "enter get_issue_number"
 issue_number=$(get_issue_number)
-echo "exit get_issue_number ${issue_number}"
 labels_json=$(get_labels_from_issue "$issue_number")
 apply_labels_to_issue "$PR_NUMBER" "$labels_json"
