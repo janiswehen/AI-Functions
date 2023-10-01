@@ -2,20 +2,14 @@
 
 source .github/workflows/scripts/github_utils.sh
 
+# Trap any errors from the helper script and exit gracefully
+trap 'exit 0' ERR
+
+# Extract the issue number based on the branch name
 issue_number=$(get_issue_number "$BRANCH_NAME")
 
-# Exit if no valid issue number found
-if [[ -z "$issue_number" ]]; then
-    echo "No valid issue number found in branch name. Exiting." >&2
-    exit 0
-fi
-
+# Get labels associated with the issue number
 labels_json=$(get_labels_to_issue_or_pr "$GITHUB_TOKEN" "$GITHUB_REPOSITORY" "$issue_number")
 
-# Check if labels_json is empty (No labels found scenario)
-if [[ -z "$labels_json" || "$labels_json" == "[]" ]]; then
-    echo "No labels to transfer. Exiting." >&2
-    exit 0
-fi
-
+# Apply those labels to the PR
 apply_labels_to_issue_or_pr "$GITHUB_TOKEN" "$GITHUB_REPOSITORY" "$PR_NUMBER" "$labels_json"

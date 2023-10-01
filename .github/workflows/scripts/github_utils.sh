@@ -8,10 +8,10 @@ get_issue_number() {
     issue_number=$(echo "$branch_name" | grep -o '^[0-9]*')
     local length=${#issue_number}
 
-    # If the issue number length is 0 or 1, return empty string
+    # If the issue number length is 0 or 1, return an error
     if [[ $length -le 1 ]]; then
-        echo ""
-        return
+        echo "Error: No valid issue number found in branch name." >&2
+        exit 1
     else
         echo "Issue number: $issue_number" >&2
     fi
@@ -39,12 +39,12 @@ apply_labels_to_issue_or_pr() {
 
     http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
 
-    # Check the API response status
+    # Check the API response status and exit if there's an error
     if [[ "$http_status" -ge 200 && "$http_status" -lt 300 ]]; then
         echo "Labels applied to PR successfully." >&2
     else
-        echo "Failed to apply labels to PR." >&2
-        exit 0
+        echo "Error: Failed to apply labels to PR." >&2
+        exit 1
     fi
 }
 
@@ -64,19 +64,21 @@ get_labels_to_issue_or_pr() {
                     "https://api.github.com/repos/${repo_name}/issues/${issue_number}")
 
     issue_title=$(echo "$issue_data" | jq -r '.title')
-    # Check if the issue exists
+
+    # Check if the issue exists and exit if not found
     if [ "$issue_title" == "null" ]; then
-        echo "No issue found with number: $issue_number" >&2
-        exit 0
+        echo "Error: No issue found with number: $issue_number" >&2
+        exit 1
     fi
     echo "Issue found with title: $issue_title" >&2
 
     # Extract issue labels and format them into a JSON array
     labels_json=$(echo "$issue_data" | jq '.labels[] .name' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
 
+    # Exit if no labels are found
     if [ "$labels_json" == "[]" ]; then
-        echo "No labels found."
-        exit 0
+        echo "Error: No labels found." >&2
+        exit 1
     fi
 
     echo "Extracted labels: $labels_json" >&2
