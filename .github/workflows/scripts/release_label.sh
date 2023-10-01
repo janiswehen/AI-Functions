@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Extract the longest issue number of BRANCH_NAME
-issue_number=$(echo "$BRANCH_NAME" | grep -o '^[0-9]*')
+echo "test"
+exit 0
+
+# Extract the longest digit prefix of BRANCH_NAME
+digit_prefix=$(echo "$BRANCH_NAME" | grep -o '^[0-9]*')
 
 # Check the length of the digit prefix
-length=${#issue_number}
+length=${#digit_prefix}
 
 # Exit if number is of length 0 or 1
 if [[ $length -eq 0 ]] || [[ $length -eq 1 ]]; then
@@ -15,13 +18,13 @@ fi
 # Fetch the issue details using GitHub API
 issue_data=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
                   -H "Accept: application/vnd.github.v3+json" \
-                  "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${issue_number}")
+                  "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${digit_prefix}")
 
 # Check if issue exists
 issue_title=$(echo "$issue_data" | jq -r '.title')
 
 if [ "$issue_title" == "null" ]; then
-    echo "No issue found with number: $issue_number"
+    echo "No issue found with number: $digit_prefix"
     exit 0
 else
     echo "Issue found with title: $issue_title"

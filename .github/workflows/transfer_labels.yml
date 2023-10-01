@@ -1,4 +1,4 @@
-name: Transfer Labels from Issue to PR
+name: Add Labels
 
 on:
   pull_request:
@@ -7,6 +7,7 @@ on:
 
 jobs:
   transfer-labels:
+    name: Transfer labels from Issue to PR
     runs-on: ubuntu-latest
 
     steps:
@@ -18,6 +19,27 @@ jobs:
 
     - name: Give execution permission to script
       run: chmod +x .github/workflows/scripts/transfer_labels.sh
+
+    - name: Run script to transfer labels
+      run: ./.github/workflows/scripts/transfer_labels.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
+        BRANCH_NAME: ${{ github.head_ref }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+  release-label:
+    name: Add Release Label
+    if: ${{ github.event.pull_request.base_ref == 'release' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+      
+    - name: Install jq
+      run: sudo apt-get install jq
+
+    - name: Give execution permission to script
+      run: chmod +x .github/workflows/scripts/release-label.sh
 
     - name: Run script to transfer labels
       run: ./.github/workflows/scripts/transfer_labels.sh
