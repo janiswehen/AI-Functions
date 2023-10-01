@@ -1,7 +1,7 @@
 name: Add Release Label
 
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
     branches:
