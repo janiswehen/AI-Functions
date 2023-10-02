@@ -16,9 +16,9 @@ jobs:
       run: echo "{{ github.event.create.ref }}" | awk -F'/' '$2 ~ /^[0-9]+/ {print $2+0}' || echo ""
     - uses: EndBug/project-fields@v1 # Changes the project field
       if: steps.num.conclusion != ''
-        with:
-          fields: Status
-          github_token: ${{ secrets.GHPROJECT_SECRET }}
-          project_url: https://github.com/users/janiswehen/projects/1
-          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ steps.num.conclusion }}
-          values: In Progress 🛠️
+      with:
+        fields: Status
+        github_token: ${{ secrets.GHPROJECT_SECRET }}
+        project_url: https://github.com/users/janiswehen/projects/1
+        resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ steps.num.conclusion }}
+        values: In Progress 🛠️
