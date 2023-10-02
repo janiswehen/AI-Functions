@@ -50,6 +50,36 @@ apply_labels_to_issue_or_pr() {
     fi
 }
 
+# Add assignees to an issue or PR using the GitHub API
+apply_assignees_to_issue_or_pr() {
+    local github_token="$1"
+    local repo_name="$2"
+    local issue_number="$3"
+    local assignees_json="$4"
+
+    local response
+    local http_status
+
+    response=$(curl -L \
+        -X POST \
+        -H "Accept: application/vnd.github+json" \
+        -H "Authorization: Bearer ${github_token}" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        https://api.github.com/repos/${repo_name}/issues/${issue_number}/assignees \
+        -d "{\"assignees\":${assignees_json}}" \
+        -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
+
+    http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
+
+    # Check the API response status and exit if there's an error
+    if [[ "$http_status" -ge 200 && "$http_status" -lt 300 ]]; then
+        echo "Assignees applied to PR successfully." >&2
+    else
+        echo "Error: Failed to apply assignees to PR." >&2
+        exit 1
+    fi
+}
+
 # Gets labels to an issue or PR using the GitHub API
 get_labels_to_issue_or_pr() {
     local github_token="$1"

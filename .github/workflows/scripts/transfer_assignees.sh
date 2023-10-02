@@ -11,4 +11,4 @@ assignees_json=$(get_assignees_to_issue_or_pr "$GITHUB_TOKEN" "$GITHUB_REPOSITOR
 echo "$assignees_json"
 
 # Apply those assignees to the PR
-# apply_assignees_to_issue_or_pr "$GITHUB_TOKEN" "$GITHUB_REPOSITORY" "$PR_NUMBER" "$assignees_json" || exit 0
+apply_assignees_to_issue_or_pr "$GITHUB_TOKEN" "$GITHUB_REPOSITORY" "$PR_NUMBER" "$assignees_json" || exit 0
