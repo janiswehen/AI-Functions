@@ -16,6 +16,7 @@ jobs:
       name: get Issue Number
       run: |
         echo "{{ github.event.create.ref }}" | awk -F'/' '{print ($2 ~ /^[0-9]+/ ? $2+0 : "")}' | awk '{print "var="$0}' >> $GITHUB_OUTPUT
+    - run: echo "${{ steps.num.outputs.var }}"
     - uses: EndBug/project-fields@v1 # Changes the project field
       if: ${{ steps.num.outputs.var != '' }}
       with:
