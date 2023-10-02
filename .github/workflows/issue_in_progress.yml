@@ -14,8 +14,8 @@ jobs:
     - name: get Issue Number
       id: test
       run: |
-        echo "random_number=$(($RANDOM % 2))" >> $GITHUB_OUTPUT
-    - run: echo "${{ steps.test.outputs.random_number }}"
+        echo "var=$(($RANDOM % 2))" >> $GITHUB_OUTPUT
+    - run: echo "${{ steps.test.outputs.var }}"
     # - uses: EndBug/project-fields@v1 # Changes the project field
     #   if: ${{ steps.test.outputs.var != '' }}
     #   with:
