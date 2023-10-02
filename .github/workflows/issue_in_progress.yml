@@ -1,4 +1,4 @@
-name: Transfer Labels
+name: Issue in Progress
 
 on:
   create:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   transfer-labels:
-    name: Transfer labels from Issue to PR
+    name: Add Issue in Progress status
     runs-on: ubuntu-latest
 
     steps:
