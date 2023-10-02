@@ -9,17 +9,13 @@ jobs:
   transfer-labels:
     name: Transfer labels from Issue to PR
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repo
       uses: actions/checkout@v2
-      
     - name: Install jq
       run: sudo apt-get install jq
-
     - name: Give execution permission to script
       run: chmod +x .github/workflows/scripts/*.sh
-
     - name: Run script to transfer labels
       run: ./.github/workflows/scripts/transfer_labels.sh
       env:

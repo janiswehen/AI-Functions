@@ -12,17 +12,13 @@ jobs:
   release-label:
     name: Add Release Label
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repo
       uses: actions/checkout@v2
-      
     - name: Install jq
       run: sudo apt-get install jq
-
     - name: Give execution permission to script
       run: chmod +x .github/workflows/scripts/*.sh
-
     - name: Run script to transfer labels
       run: ./.github/workflows/scripts/release_label.sh
       env:
