@@ -15,16 +15,16 @@ Our repository employs two primary categories of GitHub Actions workflows:
     - **Function**: Automatically moves an issue to the `In Review` column on the project board.
     - **Trigger**: When a new PR is created that references an existing issue.
 
-3. **`ga_pr_status.yml`**:
-    - **Function**: Assigns a pull request (PR) to either the `Development` or `Ready for Review` column based on its status.
-    - **Trigger**: Based on whether the PR is a draft or ready for review.
+3. **`ga_pr_development_status.yml`**:
+    - **Function**: Assigns a pull request (PR) to either the `Development`, `Merged` or `Ready for Review` column based on its status.
+    - **Trigger**: Based on whether the PR is a draft, merged or ready for review.
 
 4. **`ga_release_labeler.yml`**:
     - **Function**: Adds a `Release` label to a PR, and its associated issue if it exists.
     - **Trigger**: When a PR is created with the `release` branch as its base.
 
-5. **`ga_label_transfer.yml`**:
-    - **Function**: Copies labels from an issue to its corresponding PR when that PR is created.
+5. **`ga_transfer_issue_data.yml`**:
+    - **Function**: Copies labels and assignees from an issue to its corresponding PR when that PR is created.
     - **Trigger**: Creation of a PR that references an existing issue.
 
 ### Scripts Folder
