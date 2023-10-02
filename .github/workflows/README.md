@@ -3,7 +3,7 @@
 Our repository employs two primary categories of GitHub Actions workflows:
 
 1. **Continuous Integration (CI) Workflows**: These workflows are responsible for building, testing, and validating the codebase.
-2. **GitHub Automations**: Prefixed by `ga_`, these workflows are designed to automate various GitHub-related tasks, enhancing the efficiency of our repository management.
+2. **GitHub Automation**: Prefixed by `ga_`, these workflows are designed to automate various GitHub-related tasks, enhancing the efficiency of our repository management.
 
 ### GitHub Automation Workflows:
 
