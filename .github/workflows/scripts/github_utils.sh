@@ -147,7 +147,7 @@ get_assignees_to_issue_or_pr() {
     assignees_json=$(echo "$issue_data" | jq '.assignees[] .login' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
 
     # Exit if no assignees are found
-    if [ "$assignees_json" == "[]" ]; then
+    if [ "$assignees_json" == "" ]; then
         echo "Error: No assignees found." >&2
         exit 1
     fi
