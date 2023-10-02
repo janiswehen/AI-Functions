@@ -11,12 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - run: echo "${{ github.event.ref }}"
-    # - name: get Issue Number
-    #   id: test
-    #   run: |
-    #     echo "${{ github.event.create.ref }}" | awk '{print "var="$0}' >> $GITHUB_OUTPUT
-    # - run: echo "${{ steps.test.outputs.var }}"
+    - name: get Issue Number
+      id: test
+      run: |
+        echo "${{ github.event.ref }}" | awk '{print "var="$0}' >> $GITHUB_OUTPUT
+    - run: echo "${{ steps.test.outputs.var }}"
     # - uses: EndBug/project-fields@v1 # Changes the project field
     #   if: ${{ steps.test.outputs.var != '' }}
     #   with:
