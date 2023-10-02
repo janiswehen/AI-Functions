@@ -1,0 +1,22 @@
+name: Update Project Status for PR to '🏗️ Development'
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, converted_to_draft, closed]
+    branches: [master, release]
+    draft: true
+    merged: false
+
+jobs:
+  project-draft-pr:
+    name: Update Project Item Draft PR
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: EndBug/project-fields@v1 # Changes the project field
+        with:
+          fields: PR Status
+          github_token: ${{ secrets.GHPROJECT_SECRET }}
+          project_url: https://github.com/users/janiswehen/projects/1
+          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
+          values: 🏗️ Development

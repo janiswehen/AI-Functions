@@ -6,19 +6,19 @@ on:
     branches: [master, release]
 
 jobs:
-  project-draft-pr:
-    if: ${{ github.event.pull_request.draft == true && github.event.pull_request.merged == false }}
-    name: Update Project Item Draft PR
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: EndBug/project-fields@v1 # Changes the project field
-        with:
-          fields: PR Status
-          github_token: ${{ secrets.GHPROJECT_SECRET }}
-          project_url: https://github.com/users/janiswehen/projects/1
-          resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
-          values: 🏗️ Development
+  # project-draft-pr:
+  #   if: ${{ github.event.pull_request.draft == true && github.event.pull_request.merged == false }}
+  #   name: Update Project Item Draft PR
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: EndBug/project-fields@v1 # Changes the project field
+  #       with:
+  #         fields: PR Status
+  #         github_token: ${{ secrets.GHPROJECT_SECRET }}
+  #         project_url: https://github.com/users/janiswehen/projects/1
+  #         resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
+  #         values: 🏗️ Development
   project-pr-ready:
     if: ${{ github.event.pull_request.draft == false && github.event.pull_request.merged == false }}
     name: Update Project Item for PR ready for review
