@@ -18,10 +18,10 @@ jobs:
         echo "{{ github.event.create.ref }}" | awk -F'/' '{print ($2 ~ /^[0-9]+/ ? $2+0 : "")}' | awk '{print "var="$0}' >> $GITHUB_OUTPUT
     - run: echo "${{ steps.test.outputs.var }}"
     - uses: EndBug/project-fields@v1 # Changes the project field
-      if: ${{ steps.num.outputs.var != '' }}
+      if: ${{ steps.test.outputs.var != '' }}
       with:
         fields: Status
         github_token: ${{ secrets.GHPROJECT_SECRET }}
         project_url: https://github.com/users/janiswehen/projects/1
-        resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ steps.num.conclusion }}
+        resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ steps.test.outputs.var }}
         values: In Progress 🛠️
