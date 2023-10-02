@@ -88,3 +88,42 @@ get_labels_to_issue_or_pr() {
     # Return the extracted labels in JSON format
     echo "$labels_json"
 }
+
+# Gets assignees of an issue or PR using the GitHub API
+get_assignees_to_issue_or_pr() {
+    local github_token="$1"
+    local repo_name="$2"
+    local issue_number="$3"
+
+    local issue_data
+    local issue_title
+    local assignees_json
+
+    issue_data=$(curl -s \
+        -H "Authorization: token ${github_token}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        "https://api.github.com/repos/${repo_name}/issues/${issue_number}")
+
+    issue_title=$(echo "$issue_data" | jq -r '.title')
+
+    # Check if the issue exists and exit if not found
+    if [ "$issue_title" == "null" ]; then
+        echo "Error: No issue found with number: $issue_number" >&2
+        exit 1
+    fi
+    echo "Issue found with title: $issue_title" >&2
+
+    # Extract issue assignees and format them into a JSON array
+    assignees_json=$(echo "$issue_data" | jq '.assignees[] .login' | tr '\n' ',' | sed 's/,$//' | awk '{print "["$0"]"}')
+
+    # Exit if no assignees are found
+    if [ "$assignees_json" == "[]" ]; then
+        echo "Error: No assignees found." >&2
+        exit 1
+    fi
+
+    echo "Extracted assignees: $assignees_json" >&2
+
+    # Return the extracted assignees in JSON format
+    echo "$assignees_json"
+}

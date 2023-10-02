@@ -22,3 +22,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
         BRANCH_NAME: ${{ github.head_ref }}
         PR_NUMBER: ${{ github.event.pull_request.number }}
+    - name: Run script to transfer assignees
+      run: ./.github/workflows/scripts/transfer_assignees.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
+        BRANCH_NAME: ${{ github.head_ref }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
