@@ -3,8 +3,7 @@ name: Update Project Status for PR
 on:
   pull_request:
     types: [opened, reopened, ready_for_review, converted_to_draft, closed]
-    branches:
-      - main
+    branches: [master, release]
 
 jobs:
   project-draft-pr:

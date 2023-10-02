@@ -1,0 +1,26 @@
+name: Issue in Progress
+
+on:
+  create:
+    ref_type:
+      - branch
+
+jobs:
+  transfer-labels:
+    name: Add Progress Status for Issue
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Get Issue Number from Branch Name
+      id: issue_number
+      run: |
+        echo "${{ github.event.ref }}" | awk '{ gsub(/[^0-9].*/, "", $0); print "number="$0; }' >> $GITHUB_OUTPUT
+    - name: Change Progress Status for Issue
+      uses: EndBug/project-fields@v1 # Changes the project field
+      if: ${{ steps.issue_number.outputs.number != '' }}
+      with:
+        fields: Status
+        github_token: ${{ secrets.GHPROJECT_SECRET }}
+        project_url: https://github.com/users/janiswehen/projects/1
+        resource_url: https://github.com/janiswehen/AI-Functions/issues/${{ steps.issue_number.outputs.number }}
+        values: In Progress 🛠️
