@@ -6,7 +6,7 @@ on:
       - branch
 
 jobs:
-  transfer-labels:
+  issue-in-progress:
     name: Add Progress Status for Issue
     runs-on: ubuntu-latest
     steps:

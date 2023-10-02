@@ -1,4 +1,4 @@
-name: Transfer Labels
+name: Transfer Labels and Assignees
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   transfer-labels:
-    name: Transfer labels from Issue to PR
+    name: Transfer Issue to PR
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repo

@@ -1,4 +1,4 @@
-name: Update Project Status for PR
+name: Update Project development Status for PR
 
 on:
   pull_request:
@@ -6,39 +6,42 @@ on:
     branches: [master, release]
 
 jobs:
-  project-draft-pr:
+  pr-development:
     if: ${{ github.event.pull_request.draft == true && github.event.pull_request.merged == false }}
     name: Update Project Item Draft PR
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: EndBug/project-fields@v1 # Changes the project field
+      - name: Move to '🏗️ Development' column
+        uses: EndBug/project-fields@v1 # Changes the project field
         with:
           fields: PR Status
           github_token: ${{ secrets.GHPROJECT_SECRET }}
           project_url: https://github.com/users/janiswehen/projects/1
           resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
           values: 🏗️ Development
-  project-pr-ready:
+  pr-ready:
     if: ${{ github.event.pull_request.draft == false && github.event.pull_request.merged == false }}
     name: Update Project Item for PR ready for review
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: EndBug/project-fields@v1 # Changes the project field
+      - name: Move to '🕵️ Ready for Test Review' column
+        uses: EndBug/project-fields@v1 # Changes the project field
         with:
           fields: PR Status
           github_token: ${{ secrets.GHPROJECT_SECRET }}
           project_url: https://github.com/users/janiswehen/projects/1
           resource_url: https://github.com/janiswehen/AI-Functions/pull/${{ github.event.pull_request.number }}
           values: 🕵️ Ready for Test Review
-  project-pr-merged:
+  pr-merged:
     if: ${{ github.event.pull_request.merged == true }}
     name: Update Project Item for PR merged
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: EndBug/project-fields@v1 # Changes the project field
+      - name: Move to ✨ Merged column
+        uses: EndBug/project-fields@v1 # Changes the project field
         with:
           fields: PR Status
           github_token: ${{ secrets.GHPROJECT_SECRET }}
