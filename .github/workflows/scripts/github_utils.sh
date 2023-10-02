@@ -5,7 +5,7 @@ set -e
 # Extract the longest issue number from BRANCH_NAME
 get_issue_number() {
     local branch_name="$1"
-    
+
     local issue_number
     issue_number=$(echo "$branch_name" | grep -o '^[0-9]*')
     local length=${#issue_number}
@@ -27,17 +27,17 @@ apply_labels_to_issue_or_pr() {
     local repo_name="$2"
     local issue_number="$3"
     local labels_json="$4"
-    
+
     local response
     local http_status
 
     response=$(curl -L \
-                    -X POST \
-                    -H "Accept: application/vnd.github+json" \
-                    -H "Authorization: Bearer ${github_token}" \
-                    https://api.github.com/repos/${repo_name}/issues/${issue_number}/labels \
-                    -d "{\"labels\":${labels_json}}" \
-                    -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
+        -X POST \
+        -H "Accept: application/vnd.github+json" \
+        -H "Authorization: Bearer ${github_token}" \
+        https://api.github.com/repos/${repo_name}/issues/${issue_number}/labels \
+        -d "{\"labels\":${labels_json}}" \
+        -w "\nHTTP_STATUS:%{http_code}\n" 2>&1)
 
     http_status=$(echo "$response" | grep "HTTP_STATUS" | awk -F: '{print $2}')
 
@@ -55,15 +55,15 @@ get_labels_to_issue_or_pr() {
     local github_token="$1"
     local repo_name="$2"
     local issue_number="$3"
-    
+
     local issue_data
     local issue_title
     local labels_json
 
     issue_data=$(curl -s \
-                    -H "Authorization: token ${github_token}" \
-                    -H "Accept: application/vnd.github.v3+json" \
-                    "https://api.github.com/repos/${repo_name}/issues/${issue_number}")
+        -H "Authorization: token ${github_token}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        "https://api.github.com/repos/${repo_name}/issues/${issue_number}")
 
     issue_title=$(echo "$issue_data" | jq -r '.title')
 
