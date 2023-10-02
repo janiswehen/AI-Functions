@@ -2,8 +2,7 @@ name: Issue in Review
 
 on:
   pull_request:
-    type:
-      - opened, ready_for_review
+    types: [opened, ready_for_review]
 
 jobs:
   issue_in_review:
