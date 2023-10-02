@@ -9,14 +9,13 @@ jobs:
   transfer-labels:
     name: Add Issue in Progress status
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: get Issue Number
       id: test
       run: |
         echo "random_number=$(($RANDOM % 2))" >> $GITHUB_OUTPUT
-    - run: echo "${{ steps.test.outputs.var }}"
+    - run: echo "${{ steps.test.outputs.random_number }}"
     # - uses: EndBug/project-fields@v1 # Changes the project field
     #   if: ${{ steps.test.outputs.var != '' }}
     #   with:
