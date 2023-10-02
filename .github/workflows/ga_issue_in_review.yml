@@ -1,0 +1,27 @@
+name: Issue in Review
+
+on:
+  pull_request:
+    type:
+      - opened, ready_for_review
+
+jobs:
+  issue_in_review:
+    name: Add Progress Status for Issue
+    if: ${{ github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Get Issue Number from Branch Name
+      id: issue_number
+      run: |
+        echo "${{ github.event.pull_request.head.ref }}" | awk '{ gsub(/[^0-9].*/, "", $0); print "number="$0; }' >> $GITHUB_OUTPUT
+    - name: Change Progress Status for Issue
+      uses: EndBug/project-fields@v1 # Changes the project field
+      if: ${{ steps.issue_number.outputs.number != '' }}
+      with:
+        fields: Status
+        github_token: ${{ secrets.GHPROJECT_SECRET }}
+        project_url: https://github.com/users/janiswehen/projects/1
+        resource_url: https://github.com/janiswehen/AI-Functions/issues/${{ steps.issue_number.outputs.number }}
+        values: Ready for Review 📦
