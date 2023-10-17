@@ -30,12 +30,15 @@ jobs:
             console.log('Issue NUmber to short.')
             return
           }
+          
           const issue = await github.rest.issues.get({
             issue_number: ISSUE_NUMBER,
             owner: context.repo.owner,
             repo: context.repo.repo,
           })
           const labels = issue.data.labels.map(label => label.name)
+          console.log(issue)
+          
           console.log(`Transfering labels: ${labels}`)
           await github.rest.issues.addLabels({
             issue_number: PR_NUMBER,
@@ -43,3 +46,4 @@ jobs:
             repo: context.repo.repo,
             labels: labels
           })
+
