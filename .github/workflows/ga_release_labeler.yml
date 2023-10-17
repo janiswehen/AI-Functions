@@ -5,8 +5,8 @@ on:
     types:
       - opened
       - ready_for_review
-    branches:
-      - release
+#    branches:
+#      - release
     
 
 jobs:
@@ -16,13 +16,20 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v2
-    - name: Install jq
-      run: sudo apt-get install jq
-    - name: Give execution permission to script
-      run: chmod +x .github/workflows/scripts/*.sh
-    - name: Run script to add release labels
-      run: ./.github/workflows/scripts/release_label.sh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GHPROJECT_SECRET }}
-        BRANCH_NAME: ${{ github.head_ref }}
-        PR_NUMBER: ${{ github.event.pull_request.number }}
+    - name: Get Issue Number from Branch Name
+      id: issue_number
+      run: |
+        echo "${{ github.event.ref }}" | awk '{ gsub(/[^0-9].*/, "", $0); print "number="$0; }' >> $GITHUB_OUTPUT
+    - uses: actions/github-script@v6
+      id: my-script
+      if: ${{ steps.issue_number.outputs.number != '' }}
+      with:
+        script: |
+          const issue = await github.issues.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: ${{ steps.issue_number.outputs.number }},
+          });
+          console.log(issue)
+          const labels = issue.data.labels.map(label => label.name);
+          console.log(labels)
