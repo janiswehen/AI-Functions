@@ -35,7 +35,7 @@ jobs:
             repo: context.repo.repo,
           })
           const labels = issue.data.labels.map(label => label.name)
-          console.log(labels)
+          console.log(`Transfering labels: ${labels}`)
           await github.rest.issues.addLabels({
             issue_number: ISSUE_NUMBER,
             owner: context.repo.owner,
