@@ -20,12 +20,12 @@ jobs:
       id: my-script
       env:
           ISSUE_NUMBER: '${{ steps.issue_number.outputs.number }}'
-          PULLREQUEST_NUMBER: '${{ github.event.pull_request.number }}'
+          PR_NUMBER: '${{ github.event.pull_request.number }}'
       with:
         github-token: ${{ secrets.GHPROJECT_SECRET }}
         script: |
-          const { ISSUE_NUMBER } = process.env
-          console.log(`Issue Number: ${ISSUE_NUMBER}`)
+          const { ISSUE_NUMBER, PR_NUMBER } = process.env
+          console.log(`Issue Number: ${ISSUE_NUMBER}`, PR Number: ${PR_NUMBER})
           if (ISSUE_NUMBER.length < 2) {
             console.log('Issue NUmber to short.')
             return
@@ -38,7 +38,7 @@ jobs:
           const labels = issue.data.labels.map(label => label.name)
           console.log(`Transfering labels: ${labels}`)
           await github.rest.issues.addLabels({
-            issue_number: github.event.pull_request.number,
+            issue_number: PR_NUMBER,
             owner: context.repo.owner,
             repo: context.repo.repo,
             labels: labels
