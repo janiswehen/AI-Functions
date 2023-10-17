@@ -21,6 +21,7 @@ jobs:
       env:
           ISSUE_NUMBER: '${{ steps.issue_number.outputs.number }}'
       with:
+        github-token: ${{ secrets.GHPROJECT_SECRET }}
         script: |
           const { ISSUE_NUMBER } = process.env
           console.log(`Issue Number: ${ISSUE_NUMBER}`)
