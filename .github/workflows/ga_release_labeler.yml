@@ -32,7 +32,7 @@ jobs:
             console.log('Issue NUmber to short.')
             return
           }
-          const issue = github.rest.issues.get({
+          const issue = await github.rest.issues.get({
             issue_number: ISSUE_NUMBER,
             owner: context.repo.owner,
             repo: context.repo.repo,
