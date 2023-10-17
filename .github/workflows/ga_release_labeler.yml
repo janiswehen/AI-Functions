@@ -22,14 +22,17 @@ jobs:
         echo "${{ github.event.ref }}" | awk '{ gsub(/[^0-9].*/, "", $0); print "number="$0; }' >> $GITHUB_OUTPUT
     - uses: actions/github-script@v6
       id: my-script
-      if: ${{ steps.issue_number.outputs.number != '' }}
+      env:
+          ISSUE_NUMBER: '35'
       with:
         script: |
+          cont {ISSUE_NUMBER} = process.env
+          console.log(ISSUE_NUMBER);
           const issue = await github.issues.get({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: ${{ steps.issue_number.outputs.number }},
+            issue_number: ISSUE_NUMBER,
           });
-          console.log(issue)
+          console.log(issue);
           const labels = issue.data.labels.map(label => label.name);
-          console.log(labels)
+          console.log(labels);
