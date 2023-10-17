@@ -25,7 +25,7 @@ jobs:
         github-token: ${{ secrets.GHPROJECT_SECRET }}
         script: |
           const { ISSUE_NUMBER, PR_NUMBER } = process.env
-          console.log(`Issue Number: ${ISSUE_NUMBER}`, PR Number: ${PR_NUMBER})
+          console.log(`Issue Number: ${ISSUE_NUMBER}, PR Number: ${PR_NUMBER}`)
           if (ISSUE_NUMBER.length < 2) {
             console.log('Issue NUmber to short.')
             return
