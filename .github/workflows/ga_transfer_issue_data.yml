@@ -48,9 +48,11 @@ jobs:
           })
 
           console.log(`Transfering Assignees: ${assignees}`)
-          const func = Object.getOwnPropertyNames(github.rest.issues).filter(function(property) {
-              return typeof github.rest.issues[property] == 'function';
-          });
-          console.log(func)
+          await github.rest.issues.addAssignees({
+            issue_number: PR_NUMBER,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            assignees: assignees
+          })
 
 
