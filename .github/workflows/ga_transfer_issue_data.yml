@@ -38,13 +38,20 @@ jobs:
           })
           const labels = issue.data.labels.map(label => label.name)
           const assignees = issue.data.assignees.map(assignee => assignee.login)
-          console.log(assignees)
 
-          console.log(`Transfering labels: ${labels}`)
+          console.log(`Transfering Labels: ${labels}`)
           await github.rest.issues.addLabels({
             issue_number: PR_NUMBER,
             owner: context.repo.owner,
             repo: context.repo.repo,
             labels: labels
+          })
+
+          console.log(`Transfering Assignees: ${assignees}`)
+          await github.rest.issues.addAssignees({
+            issue_number: PR_NUMBER
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            assignees: assignees,
           })
 
