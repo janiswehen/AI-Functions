@@ -23,16 +23,9 @@ jobs:
     - uses: actions/github-script@v6
       id: my-script
       env:
-          ISSUE_NUMBER: '35'
+          NUMBER: '35'
+          ISSUE_NUMBER: '${{ steps.issue_number.outputs.number }}'
       with:
         script: |
-          cont number = process.env.ISSUE_NUMBER
-          console.log(ISSUE_NUMBER);
-          const issue = await github.issues.get({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: number,
-          });
-          console.log(issue);
-          const labels = issue.data.labels.map(label => label.name);
-          console.log(labels);
+          const { ISSUE_NUMBER, NUMBER } = process.env
+          console.log(`NUMBER ${NUMBER} ISSUE_NUMBER ${ISSUE_NUMBER}`)
