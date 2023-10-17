@@ -37,8 +37,9 @@ jobs:
             repo: context.repo.repo,
           })
           const labels = issue.data.labels.map(label => label.name)
-          console.log(issue)
-          
+          const assignees = issue.data.assignees.map(assignee => assignee.login)
+          console.log(assignees)
+
           console.log(`Transfering labels: ${labels}`)
           await github.rest.issues.addLabels({
             issue_number: PR_NUMBER,
