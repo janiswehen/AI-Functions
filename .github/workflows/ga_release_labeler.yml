@@ -38,4 +38,7 @@ jobs:
             repo: context.repo.repo,
           })
           console.log(issue)
+          console.log(issue.data)
+          console.log(issue.data.labels)
+          console.log(issue.data.labels.map(label => label.name))
 
