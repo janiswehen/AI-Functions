@@ -39,20 +39,26 @@ jobs:
           const labels = issue.data.labels.map(label => label.name)
           const assignees = issue.data.assignees.map(assignee => assignee.login)
 
-          console.log(`Transfering Labels: ${labels}`)
-          await github.rest.issues.addLabels({
-            issue_number: PR_NUMBER,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            labels: labels
-          })
+          if (labels.length == 0) {
+            console.log('No Labels to transfer')
+          } else {
+            console.log(`Transfering Labels: ${labels}`)
+            await github.rest.issues.addLabels({
+              issue_number: PR_NUMBER,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: labels
+            })
+          }
 
-          console.log(`Transfering Assignees: ${assignees}`)
-          await github.rest.issues.addAssignees({
-            issue_number: PR_NUMBER,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            assignees: assignees
-          })
-
-
+          if (assignees.length == 0) {
+            console.log('No Assignees to transfer')
+          } else {
+            console.log(`Transfering Assignees: ${assignees}`)
+            await github.rest.issues.addAssignees({
+              issue_number: PR_NUMBER,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              assignees: assignees
+            })
+          }
