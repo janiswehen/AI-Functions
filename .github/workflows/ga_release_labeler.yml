@@ -23,9 +23,19 @@ jobs:
     - uses: actions/github-script@v6
       id: my-script
       env:
-          NUMBER: '35'
           ISSUE_NUMBER: '${{ steps.issue_number.outputs.number }}'
       with:
         script: |
-          const { ISSUE_NUMBER, NUMBER } = process.env
-          console.log(`NUMBER ${NUMBER} ISSUE_NUMBER ${ISSUE_NUMBER}`)
+          const { ISSUE_NUMBER } = process.env
+          console.log(`Issue Number: ${ISSUE_NUMBER}`)
+          if (ISSUE_NUMBER.length < 2) {
+            console.log('Issue NUmber to short.')
+            return
+          }
+          const issue = github.rest.issues.get({
+            issue_number: ISSUE_NUMBER,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          })
+          console.log(issue)
+
