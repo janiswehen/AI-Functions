@@ -15,3 +15,4 @@ asdasd
 - [ ] cave creeper
 - [ ] slime
 - [ ] fish...
+- [ ] blaze
